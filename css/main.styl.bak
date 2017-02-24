@@ -1,0 +1,192 @@
+/*博主标记 CSS开始*/
+.sskadmin {
+    background-color: #444444!important;
+    border-color: #01B171!important;
+    border-radius: 4px;
+    padding: 0 5px!important;
+    opacity: 1;
+}
+/*博主标记 CSS结束*/
+/*多说UA开始*/
+span.ua{
+    margin: 0 1px!important;
+    color:#FFFFFF!important;
+    /*text-transform: Capitalize!important;
+    float: right!important;
+    line-height: 18px!important;*/
+}
+.ua_other.os_other{
+    background-color: #999999!important;
+    color: #fff;
+    border: 1px solid #BBB!important;
+    border-radius: 4px;
+}
+.ua_ie{
+    background-color: #999999!important;
+    border-color: #357ebd!important;
+    border-radius: 4px;
+    padding: 0 5px!important;
+}
+.ua_firefox{
+    background-color: #999999!important;
+    border-color: #eea236!important;
+    border-radius: 4px;
+    padding: 0 5px!important;
+}
+.ua_maxthon{
+    background-color: #999999!important;
+    border-color: #7373B9!important;
+    border-radius: 4px;
+    padding: 0 5px!important;
+}
+.ua_ucweb{
+    background-color: #999999!important;
+    border-color: #d43f3a!important;
+    border-radius: 4px;
+    padding: 0 5px!important;
+}
+.ua_sogou{
+    background-color: #999999!important;
+    border-color: #4cae4c!important;
+    border-radius: 4px;
+    padding: 0 5px!important;
+}
+.ua_2345explorer{
+    background-color: #999999!important;
+    border-color: #4cae4c!important;
+    border-radius: 4px;
+    padding: 0 5px!important;
+}
+.ua_2345chrome{
+    background-color: #999999!important;
+    border-color: #4cae4c!important;
+    border-radius: 4px;
+    padding: 0 5px!important;
+}
+.ua_mi{
+    background-color: #999999!important;
+    border-color: #4cae4c!important;
+    border-radius: 4px;
+    padding: 0 5px!important;
+}
+.ua_lbbrowser{
+    background-color: #999999!important;
+    border-color: #4cae4c!important;
+    border-radius: 4px;
+    padding: 0 5px!important;
+}
+.ua_chrome{
+    background-color: #999999!important;
+    border-color: #4cae4c!important;
+    border-radius: 4px;
+    padding: 0 5px!important;
+}
+.ua_qq{
+    background-color: #999999!important;
+    border-color: #4cae4c!important;
+    border-radius: 4px;
+    padding: 0 5px!important;
+}
+.ua_apple{
+    background-color: #999999!important;
+    border-color: #4cae4c!important;
+    border-radius: 4px;
+    padding: 0 5px!important;
+}
+.ua_opera{
+    background-color: #999999!important;
+    border-color: #d43f3a!important;
+    border-radius: 4px;
+    padding: 0 5px!important;
+}
+
+
+.os_vista,.os_2000,.os_windows,.os_xp,.os_7,.os_8,.os_8_1 {
+    background-color: #BBBBBB!important;
+    border-color: #46b8da!important;
+    border-radius: 4px;
+    padding: 0 5px!important;
+}
+
+.os_android {
+    background-color: #BBBBBB!important;
+    border-color: #01B171!important;
+    border-radius: 4px;
+    padding: 0 5px!important;
+}
+.os_ubuntu{
+    background-color: #BBBBBB!important;
+    border-color: #01B171!important;
+    border-radius: 4px;
+    padding: 0 5px!important;
+}
+.os_linux {
+    background-color: #BBBBBB!important;
+    border-color: #1F1F1F!important;
+    border-radius: 4px;
+    padding: 0 5px!important;
+}
+.os_mac{
+    background-color: #BBBBBB!important;
+    border-color: #1F1F1F!important;
+    border-radius: 4px;
+    padding: 0 5px!important;
+}
+.os_unix{
+    background-color: #BBBBBB!important;
+    border-color: #1F1F1F!important;
+    border-radius: 4px;
+    padding: 0 5px!important;
+}
+.os_nokia{
+    background-color: #BBBBBB!important;
+    border-color: #1F1F1F!important;
+    border-radius: 4px;
+    padding: 0 5px!important;
+}
+/*多说UA结束*/
+// CSS Style Guide: http://codeguide.co/#css
+
+
+
+$scheme    = hexo-config('scheme') ? hexo-config('scheme') : 'Muse';
+$variables = base $scheme custom;
+$mixins    = base $scheme custom;
+
+
+
+// Variables Layer
+// --------------------------------------------------
+for $variable in $variables
+  @import "_variables/" + $variable
+
+
+// Mixins Layer
+// --------------------------------------------------
+for $mixin in $mixins
+  @import "_mixins/" + $mixin;
+
+
+
+// Common Layer
+// --------------------------------------------------
+
+// Scaffolding
+@import "_common/scaffolding";
+
+// Layout
+@import "_common/outline";
+
+// Components
+@import "_common/components";
+
+
+// Schemes Layer
+// --------------------------------------------------
+@import "_schemes/" + $scheme;
+
+
+
+// Custom Layer
+// --------------------------------------------------
+@import "_custom/custom";
