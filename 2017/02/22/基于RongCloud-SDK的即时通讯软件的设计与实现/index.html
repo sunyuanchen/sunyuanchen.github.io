@@ -1,0 +1,731 @@
+<!doctype html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/vendors/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/vendors/font-awesome/css/font-awesome.min.css?v=4.4.0" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.0.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="IOS,社交类app," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.0.1" />
+
+
+
+
+
+
+<meta name="description" content="摘要：随着科技的高速发展，3G、4G网络与WIFI在现实生活中随处可得，这使得便携式移动设备极大化地普及。IOS是与安卓平分秋色的便携设备上的操作系统，凭借其精致简洁的系统界面，系统的稳定安全性深得用户的青睐。在众多的移动应用中，即时通讯软件深受用户群体的欢迎和喜爱，在IOS和安卓上的开发与应用也趋于成熟。本文就IOS系统上的即时通讯软件“Lit-C”的设计与实现进行详细的开发介绍，描述本即时通">
+<meta property="og:type" content="article">
+<meta property="og:title" content="基于RongCloud SDK的即时通讯软件的设计与实现">
+<meta property="og:url" content="http://yoursite.com/2017/02/22/基于RongCloud-SDK的即时通讯软件的设计与实现/index.html">
+<meta property="og:site_name" content="Sunyuanchen">
+<meta property="og:description" content="摘要：随着科技的高速发展，3G、4G网络与WIFI在现实生活中随处可得，这使得便携式移动设备极大化地普及。IOS是与安卓平分秋色的便携设备上的操作系统，凭借其精致简洁的系统界面，系统的稳定安全性深得用户的青睐。在众多的移动应用中，即时通讯软件深受用户群体的欢迎和喜爱，在IOS和安卓上的开发与应用也趋于成熟。本文就IOS系统上的即时通讯软件“Lit-C”的设计与实现进行详细的开发介绍，描述本即时通">
+<meta property="og:image" content="http://araome.yiluup.com/2015/06/hexo-next-arao-edit.jpg">
+<meta property="og:updated_time" content="2017-02-24T10:59:18.279Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="基于RongCloud SDK的即时通讯软件的设计与实现">
+<meta name="twitter:description" content="摘要：随着科技的高速发展，3G、4G网络与WIFI在现实生活中随处可得，这使得便携式移动设备极大化地普及。IOS是与安卓平分秋色的便携设备上的操作系统，凭借其精致简洁的系统界面，系统的稳定安全性深得用户的青睐。在众多的移动应用中，即时通讯软件深受用户群体的欢迎和喜爱，在IOS和安卓上的开发与应用也趋于成熟。本文就IOS系统上的即时通讯软件“Lit-C”的设计与实现进行详细的开发介绍，描述本即时通">
+<meta name="twitter:image" content="http://araome.yiluup.com/2015/06/hexo-next-arao-edit.jpg">
+
+
+
+<script type="text/javascript" id="hexo.configuration">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"post"},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: 0,
+      author: '博主'
+    }
+  };
+</script>
+
+  <title> 基于RongCloud SDK的即时通讯软件的设计与实现 | Sunyuanchen </title>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans,default">
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+  
+    
+  
+
+  <div class="container one-collumn sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-meta ">
+  
+
+  <div class="custom-logo-site-title">
+    <a href="/"  class="brand" rel="start">
+      <span class="logo-line-before"><i></i></span>
+      <span class="site-title">Sunyuanchen</span>
+      <span class="logo-line-after"><i></i></span>
+    </a>
+  </div>
+  <p class="site-subtitle"></p>
+</div>
+
+<div class="site-nav-toggle">
+  <button>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+    <span class="btn-bar"></span>
+  </button>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+            
+            
+              
+                基于RongCloud SDK的即时通讯软件的设计与实现
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            <span class="post-meta-item-icon">
+              <i class="fa fa-calendar-o"></i>
+            </span>
+            <span class="post-meta-item-text">发表于</span>
+            <time itemprop="dateCreated" datetime="2017-02-22T02:51:51+08:00" content="2017-02-22">
+              2017-02-22
+            </time>
+          </span>
+
+          
+            <span class="post-category" >
+              &nbsp; | &nbsp;
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              <span class="post-meta-item-text">分类于</span>
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/软件/" itemprop="url" rel="index">
+                    <span itemprop="name">软件</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+
+              
+                <span itemprop="about" itemscope itemtype="https://schema.org/Thing">
+                  <a href="/categories/软件/IOS/" itemprop="url" rel="index">
+                    <span itemprop="name">IOS</span>
+                  </a>
+                </span>
+
+                
+                
+
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+
+          
+          
+
+          
+              &nbsp; | &nbsp;
+              <span class="page-pv"><i class="fa fa-fa-eye">已浏览</i>
+              <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>次
+              </span>
+          
+        </div>
+      </header>
+    
+
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+        <div class="post-gallery" itemscope itemtype="http://schema.org/ImageGallery">
+          
+          
+            <div class="post-gallery-row">
+              <a class="post-gallery-img fancybox"
+                 href="http://araome.yiluup.com/2015/06/hexo-next-arao-edit.jpg" rel="gallery_cizjwc6au00001ca79yl7jmpw"
+                 itemscope itemtype="http://schema.org/ImageObject" itemprop="url">
+                <img src="http://araome.yiluup.com/2015/06/hexo-next-arao-edit.jpg" itemprop="contentUrl"/>
+              </a>
+            
+          
+
+          
+          </div>
+        </div>
+      
+
+      
+        <p> <strong>摘要</strong>：随着科技的高速发展，3G、4G网络与WIFI在现实生活中随处可得，这使得便携式移动设备极大化地普及。IOS是与安卓平分秋色的便携设备上的操作系统，凭借其精致简洁的系统界面，系统的稳定安全性深得用户的青睐。在众多的移动应用中，即时通讯软件深受用户群体的欢迎和喜爱，在IOS和安卓上的开发与应用也趋于成熟。本文就IOS系统上的即时通讯软件“Lit-C”的设计与实现进行详细的开发介绍，描述本即时通讯软件各项功能的具体实现方式。<br>   本软件在Mac环境下，以Xcode作为开发工具，以Swift作为编程语言，以LeanCloud作为云端数据库，以RongCloud作为云端服务器，采用Xcode上的Storyboard进行软件的UI设计与动态控件的连接，最终实现了在联网环境下拥有聊天交友功能的即时通讯软件。本软件从界面上主要分为登录与注册界面，会话列表界面，聊天界面，联系人界面与设置界面。软件的登录与注册界面实现了动态背景，用户信息注册，用户名与密码验证等功能；会话列表界面实现了处理请求添加好友的消息，从本地提取用户信息（若本地无用户则从服务器获取用户信息），对未读消息的处理等功能；聊天界面实现了聊天用户头像的显示，语音消息的发送，图片与表情的发送等功能；联系人界面实现了添加好友，显示昵称和头像，刷新朋友列表等功能；设置界面实现了显示本体用户信息，本体用户返回登录界面等功能。软件使用Cocoapods安装了LeanCloud、融云动态背景等必备的SDK，使用桥接OC代码的方法实现了部分通过Objective-C语言编写的类的功能。<br><strong>关键词：</strong>IOS；即时通讯软件；LeanCloud；RongCloud；Cocoapods<br><a id="more"></a><br>Instant Messaging Software Design and Implemen-tation Based on RongCloud SDK<br>Abstract：With the rapid development of science and technology, 3G, 4G networks and WiFi in real life can be found anywhere in the world, which makes the maximization of portable mo-bile devices to spread. IOS and Android are all the best operating system in the world. IOS has good system stability and its simple system interface won the favor of users. Among the many mobile applications, instant messaging software is very popular and ma-ture in IOS and Android. This article introduces the design method of the instant messag-ing software which named “Lit-C” on the IOS system, and describes the realization of the function of the instant messaging software.<br>On the Mac system, it uses Xcode as a development tool, Swift as a programming lan-guage, LeanCloud as a cloud database, RongCloud as a cloud server, the Storyboard on the Xcode to design the software’s UI and realize the dynamic control function. Eventu-ally it can be completed in the environment of the Internet to chat with friends. This app is mainly divided into the login and register page, the conversation list page, the chat page, the contact list page and the set page. This app’s login and registration page includes the function of the dynamic background, getting the users’ registration information, the username and the password’s authentication; The conversation list page includes the func-tion of dealing with the request message to add friends, getting from the local extraction of user information (if no local users getting from the server), dealing with the unread message; The chat page includes the function of realizeing the display of the users’ avatar chat, sending voice messages, pictures and expressions; The contact page includes the function of adding friends, refreshing the list of friends; The settings page includes the function of receiving users’ information, being logged out. it also uses the Bridge to realize some functions that is compiled by Objective-C.<br><strong>Key words</strong>: IOS; instant messaging software; LeanCloud; RongCloud; Cocoapods</p>
+<h1 id="引言"><a href="#引言" class="headerlink" title="引言"></a>引言</h1><h2 id="课题背景"><a href="#课题背景" class="headerlink" title="课题背景"></a>课题背景</h2><p>随着CPU制程趋于更小的纳米数，体积更小性能更强的芯片被设计到移动设备中来，其愈发逼近于PC的性能正引爆新一轮信息革命-移动互联网革命[1]。移动端的操作系统分为Apple公司的IOS系统，Google公司的安卓系统,其中苹果公司的IOS操作系统基于价值链构建了“ 硬件＋软件＋服务” 的开放创新模式[2]。随着我国经济的飞速增长，我国手机用户群体从5-6岁尚在读小学的孩童到年近花甲的老人，几乎涵盖所有人口。从早晨起床用到的闹钟，晨练时间用到的计步器，团购午餐的App，再到工作时候必要的商务办公软件，移动应用程序几乎涵盖用户生活的所有领域。此款即时通讯软件就是基于IOS系统用Swift语言进行开发的社交软件。</p>
+<h2 id="国内外发展状况"><a href="#国内外发展状况" class="headerlink" title="国内外发展状况"></a>国内外发展状况</h2><p>移动设备的爆发式增长是移动应用的开发机遇，无论是Apple的Appstore还是谷歌的安卓市场，各式各样的软件百家争鸣。社交类软件就是庞大的软件网络中比较流行的软件之一，从消息推送到动态分享，几乎每一个用户都离不开自己设备中的通讯软件，它是用户沟通、用户协作、信息分享的重要方式。从国外的Facebook、 Twitter、Instagram到国内的微信、QQ、新浪微博等，都是社交类的应用[3]。<br>国外的Facebook的中文名为脸书，成立于2004年2月4日。脸书的用户几乎包含全世界。2015年8月28日脸书CEO在个人账号上推送道：Facebook在此周一的单日用户数突破十亿。在国外的各类软件作为消息分享的重要渠道就是脸书，并且很多的歌手，运动明星与各国政要等都是Facebook的使用者。脸书的风格主要为简洁和用户的拓展性强，它会根据用户的兴趣爱好向用户推荐志同道合的人。<br>QQ是一款涵盖多国语言的聊天软件，覆盖Windows、OSX、安卓与IOS等多平台的即时通讯软件。凭借早期抢占的国内用户比，成为国内一家独大的互联网公司。QQ的用户简洁，设计合理，对各年龄层次的用户具有很强的吸引力，其在中国QQ的地位就如Facebook在西方国家一样。他的优点值得各社交类软件设计者的学习。<br>因此一款功能适合，界面精致的社交应用的开发是非常有潜力和有需要的。</p>
+<h2 id="软件实现的目的"><a href="#软件实现的目的" class="headerlink" title="软件实现的目的"></a>软件实现的目的</h2><p>本即时通讯软件是在Mac系统下用Xcode开发的以RongCloud作为框架，LeanCloud作为云端数据库来运行的移动应用软件。掌握如何从云端数据库处理APP中用户的登录信息、头像信息和聊天信息的数据，掌握如何从RongCloud SDK中实现软件的各项基本聊天功能，掌握如何在StoryBoard下构建软件的基本框架并用AutoLayOut实现UI界面在各种iPad,iPhone上的适配，掌握如何用Cocoapods来将各种功能的SDK例如:RongCloud SDK（主要聊天功能）、Pop(动态特效功能)、KxMenu(菜单UI美化功能)等二次开发到Xcode项目中。最终实现随时随地的即时通讯功能，并能够在实际机器上测试。</p>
+<h1 id="即时通讯软件实现的关键技术"><a href="#即时通讯软件实现的关键技术" class="headerlink" title="即时通讯软件实现的关键技术"></a>即时通讯软件实现的关键技术</h1><h2 id="Swift语言简介"><a href="#Swift语言简介" class="headerlink" title="Swift语言简介"></a>Swift语言简介</h2><p>在IOS开发主要用到两种编程语言Objective-C与Swift。Objective-C是一种较为晦涩的语法。早期，Objective-C语言不支持自动内存管理，需要开发者手动申请内存空间，并在使用后释放内存空间。因此，早期程序开发经常面临内存泄露或内存过早释放导致的程序问题。在近期，Objective-C才加入了自动内存管理机制，名为AutomaticReference Counting ( ARC，但仍然需要开发者通过alloc申请内存分配。由于众多“历史包袱”和与C语言兼容，限制了Objective-C的发展，苹果公司一直希望能够提供一种更加现代的语言，改进原有语言的不足。因此Swift语言应运而生。Swift语言是苹果公司于2014年6月苹果开发者大会[4]发布的苹果操作系统编程的新语言，它的特点是代码执行效率的提升，与界面的互动性增强，现代化的语言模式，严格的防御机制。Swift默认类型是安全的，不支持不安全访问的方式，可以自动推断变量的类型，提供了泛型、重载，全面改为点语法，并取消了头文件。Swift语言被形容为没有C的Objective-C语言。Swift语言通过LLUM编译，支持现有的Cocoa戒ocoaTouch框架，可以与Objective-C语言很好的兼容。Swift语言中最大的亮点是根据布雷特·维克多理念开发的Playgrounds功能，在开发者一边输入代码时，右侧边栏能够同时显现出代码运行的结果。Swift语言替代原有的Objective-C语言，顺应计算机语言的发展历程，符合编程语言进化的思维，更加高效，安全，易懂。所以选择用Swift语言编写本社交软件是符合苹果公司的发展需求的。</p>
+<h2 id="开发工具"><a href="#开发工具" class="headerlink" title="开发工具"></a>开发工具</h2><h3 id="Cocoapods技术"><a href="#Cocoapods技术" class="headerlink" title="Cocoapods技术"></a>Cocoapods技术</h3><p>在OSX系统下开发IOS App的高效工具中，Cocoapods第三方类库管理工具是必不可少的。只需要在项目的Podfile文件夹中添加各种依赖库，Cocoapods就可以轻松对已添加的类库进行管理，支持更新与卸载。简要的流程是:首先在Cocoapods官网搜索你要为自己项目配置的类库，然后用OSX自带命令符终端将SDK安装进自己的项目中。关键要注意的是，在为自己项目安装完第三方SDK后，之后编译工程需要打开用“.workspace”作为后缀名的文件而不是“.pro”。最后通过头文件调用来实现安装的组件的功能。</p>
+<h3 id="RongCloud-SDK"><a href="#RongCloud-SDK" class="headerlink" title="RongCloud SDK"></a>RongCloud SDK</h3><p>RongCloud是一家国内专业的社交类服务提供商，专注提供免费的即时通讯基础能力服务和云端服务给互联网、移动互联网开发者，大大节约了即时通讯软件开发的成本和时间。通过RongCloud平台，开发者不必搭建硬件服务器环境，就可以将即时通讯、实时网络获取功能集成至应用中。RongCloud的具体安装方法如下：首先打开OSX中LauchPad界面的终端软件，添加<a href="https://rubygems.org/源，接着安装Cocoapods。安装完Cocoapods后在项目文件夹下创建名为Podfile的文件，并将RongCloud" target="_blank" rel="external">https://rubygems.org/源，接着安装Cocoapods。安装完Cocoapods后在项目文件夹下创建名为Podfile的文件，并将RongCloud</a> SDK写入到Podfile中，通过“cd”,“ls”命令将终端打开到新项目文件夹并运行“$ pod install”，等待安装完SDK后在头文件中用“#import &lt;/.h&gt;”方法调用RongCloud SDK即可，打开项目目录下的工作空间“XCWorkSpace”后自己的工程就具备RongCloud SDK的功能了。RongCloud体系架构图如图2-1所示。</p>
+<p>图2-1 RongCloud体系架构图</p>
+<h3 id="LeanCloud云数据库"><a href="#LeanCloud云数据库" class="headerlink" title="LeanCloud云数据库"></a>LeanCloud云数据库</h3><p>在谷歌工作多年的江宏是 LeanCloud 的联合创始人及 CEO，LeanCloud 是国内针对移动应用的一站式云端服务。它主要具备以下功能：不用硬件服务器， LeanCloud 提供了一站式后端云服务，从云存储[5]、实时聊天、消息推送到移动统计，涵盖应用开发的多方面后端需求；不再理会「应用服务器」、「数据服务器」，不再担心流量和压力。只需要满足「JSONObject」这一基本格式就能实现Schema-Free；<br>使用 SQL 语句分析应用数据；文件存储采用国内全网加速 CDN，支持图片、音频、视频等多种类型文件；全平台 SDK 支持：iOS、Android、Windows Phone、Unity 3D、Cocos2D-x 以及JavaScript。</p>
+<h3 id="Xcode开发平台"><a href="#Xcode开发平台" class="headerlink" title="Xcode开发平台"></a>Xcode开发平台</h3><p>Xcode是由苹果公司研发的开发工具，并且Xcode只能在苹果公司的OSX操作系统上运行。Xcode是开发OS X 和 iOS 应用程序的最快捷的方式，且具有安全机制[6]。Xcode具有统一的开发者界面，对项目的设计，编码、测试与调试都可以在一个简单的窗口内完成。从初始化到项目的最终部署所经历的各式各样的细节都可以通过Xcode负责处理。您可以通过这个工具来完成如下工作：对项目进行管理，包括指定项目对组件的依赖、和代码连续输入的风格；在可视化的编译器上编写语法渲染、收缩等功能的源代码；对项目的不同组件和代码，进行查找、替换和检索，包括.h文件和txt；连编工程；调试工程编译器的图形化风格。<br>Xcode可以连编由OC和Swift编写的源代码组成的项目，可以生成支持OSX系统的所有类型的执行代码。在使用Xcode工具时，可以对编入的Swift代码自动补全。Xcode中的代码管理器也是十分便捷的，代码管理器可以自动生成类关系图和函数方法列表。Xcode中集成的Storyboard更是界面设计的必备组件。</p>
+<h3 id="Storyboard"><a href="#Storyboard" class="headerlink" title="Storyboard"></a>Storyboard</h3><p>Storyboard是Xcode中可视化的界面设计编译器。与纯代码实现的界面构造函数相比Storyboard存在的一大意义在于为UI提供了可视化开发方式，另一方面提供了一种更好的MVC[7]的View层实现方式，让你的ViewController代码更简洁，执行效率更高，更节省项目开发的周期，简单的界面搭配也便于后期的维护与新功能的添加。在Storyboard右下角的组件选框中可以方便地将View（新界面），Image（图片编辑），Text（文本编辑框），Button（按钮）等功能拖入进自己的视图窗口中。</p>
+<h1 id="即时通讯软件的需求分析"><a href="#即时通讯软件的需求分析" class="headerlink" title="即时通讯软件的需求分析"></a>即时通讯软件的需求分析</h1><h2 id="业务需求分析"><a href="#业务需求分析" class="headerlink" title="业务需求分析"></a>业务需求分析</h2><h3 id="功能性需求及用例图"><a href="#功能性需求及用例图" class="headerlink" title="功能性需求及用例图"></a>功能性需求及用例图</h3><p>本项目定位为基本的即时通讯软件，功能需求是实现用户的信息注册，以及用户与用户之间的即时通讯。软件围绕这一标准拓展其他功能，诸如好友添加，头像显示，信息提醒等功能。注册登录界面的简洁明了。作为移动APP，注册和登录功能设置得简单易懂将会提升用户的使用体验。用户只需要填写几个必填项目就能进行注册。用户可以对其他用户发起会话，在应用在IOS后台时也能收到其他用户发来的未读消息。在聊天界面能够显示与之会话的其他用户名称及其头像。软件在用户登录后应该具有退出到登录界面的功能。联系人列表应当具有搜索好友和添加好友（其他用户）的功能，其他用户能够接受到添加好友的指令。用户列表通过刷新能够获得在线用户的信息并与之会话。具体如用例图3-1所示。<br>图3-1 用例图</p>
+<h3 id="非功能性需求"><a href="#非功能性需求" class="headerlink" title="非功能性需求"></a>非功能性需求</h3><p>本即时通讯软件在达到上述的基本功能后，还应当具有可应用性与周期维护性，UI美化，APP图标及项目名称等非功能性需求。对代码进行结构优化，提升用户体验。软件内存控住合理，在IPhone等设备上测试时保证软件不会闪退。使用Xcode配置appIcon图片以及载入程序图片。在登录界面使用JSAnimatedImage进行动态背景图片的配置。</p>
+<h2 id="软件设计约束"><a href="#软件设计约束" class="headerlink" title="软件设计约束"></a>软件设计约束</h2><p>软件设计约束将指定本软件在设计周期、开发环境、程序需要完成的软件需求分析中的功能、软件不需要考虑的方面、软件测试的标准等等。与业务需求不同的是它从软件设计的角度上约束了软件,使本软件的设计有明确的边缘,集中了开发者和软件管理者的目标。主要通过软件设计目标、软件设计范围和软件测试标准来对本软件进行约束。</p>
+<h3 id="软件设计目标"><a href="#软件设计目标" class="headerlink" title="软件设计目标"></a>软件设计目标</h3><p>本项目所用开发环境为Xcode7.2,编程语言为Swift。该软件需要实现需求分析中所述的功能,功能需要分层次来实现,如好友添加、登录注册界面、聊天等主要功能需要在软件设计的初期阶段实现,次要功能比如动态界面实现可在软件后期迭代过程中逐步添加完善。软件设计的宗旨是能满足在Appstore上架。</p>
+<h3 id="软件设计范围"><a href="#软件设计范围" class="headerlink" title="软件设计范围"></a>软件设计范围</h3><p>软件所需列表数据、用户信息、用户头像的URL等数据应调用LeanCloud云服务器相应接口获取,用户聊天数据应调用RongCloud SDK中的相关类的接口获取。己从服务器获取的信息应该在本地缓存,以减少接口调用次数。在Mac本地系统后台设计一个简单的Server来实现LeanCloud服务器和RongCloud服务器之间的身份授权。</p>
+<h3 id="软件设计测试标准"><a href="#软件设计测试标准" class="headerlink" title="软件设计测试标准"></a>软件设计测试标准</h3><p>在软件设计的后期阶段，为了保证软件功能的最终实现，软件测试期间应该遵循软件的各项功能基本完善，不存在遗漏功能，能在IOS系统的移动终端[8]实机测试的标准来执行。</p>
+<h1 id="即时通讯软件的概要设计"><a href="#即时通讯软件的概要设计" class="headerlink" title="即时通讯软件的概要设计"></a>即时通讯软件的概要设计</h1><h2 id="设计流程"><a href="#设计流程" class="headerlink" title="设计流程"></a>设计流程</h2><p>软件设计主要分为以下四个步骤，并抽象为如下流程图4-1。<br>步骤一：在Mac上进行Cocoapods的配置来使软件集成RongCloud SDK,然后在RongCloud官网注册开发者账号以获得开发许可。步骤二：在Xcode下完成本软件的客户端，包括登录与注册界面，会话列表界面，聊天界面，联系人列表界面与设置界面等基本功能且在必要时候能桥接OC代码[9]。步骤三：注册并使用LeanCloud作为云端数据库，用于存储App项目中的用户信息。步骤四：设计系统后台Sever用于验证LeanCloud服务器与RongCloud服务器之间的授权。</p>
+<p>图4-1软件设计流程图</p>
+<h2 id="软件结构设计"><a href="#软件结构设计" class="headerlink" title="软件结构设计"></a>软件结构设计</h2><p>本软件主要分为前端和服务器两部分。前端为用户操作部分，作为客户端装在用户的移动设备上；服务器分为LeanCloud云数据库来存储用户信息与RongCloud服务器作为即时通讯传输。</p>
+<h3 id="前端功能结构"><a href="#前端功能结构" class="headerlink" title="前端功能结构"></a>前端功能结构</h3><p>前端作为客户端程序装在用户的移动设备上，主要包括登录与注册界面，会话列表界面，聊天界面，联系人列表界面与设置界面等。软件的登录与注册界面实现了动态背景，用户信息注册，用户名与密码验证等功能；会话列表界面实现了处理请求添加好友的消息，从本地提取用户信息（若本地无用户则从服务器获取用户信息），对未读消息的处理等功能；聊天界面实现了聊天用户头像的显示，语音消息的发送，图片与表情的发送等功能；联系人界面实现了添加好友，显示昵称和头像，刷新朋友列表等功能；设置界面实现了显示用户自身信息，退出登录等功能。前端功能结构图(在Xcode中用Storyboard构建)如4-2所示。</p>
+<p>图4-2 Xcode StoryBoard图</p>
+<h3 id="服务器功能结构"><a href="#服务器功能结构" class="headerlink" title="服务器功能结构"></a>服务器功能结构</h3><p>服务器功能如图4-3所示。 </p>
+<p>图4-3软件服务器关系结构图<br>用户数据（User Data）和用户好友消息（Friend Relationship Data）保存在LeanCloud上，RongCloud不需要同步 App 的用户系统和好友关系；绿色为RongCloud服务器（RongCloud Server）和RongCloud SDK。蓝色部分为本应用（App）和应用服务器（使用LeanCloud作为应用服务器），蓝色箭头表示将项目的业务数据经由LeanCloud应用服务器；绿色箭头表示消息需要经过RongCloud服务器进行转发（IM 的离线、通知等逻辑决定了消息必须经由服务器进行一次转发）；橙色箭头表示LeanCloud只需要和RongCloud服务器进行身份授权，不需要提交详细的用户资料。</p>
+<h2 id="服务器间验证工具的设计"><a href="#服务器间验证工具的设计" class="headerlink" title="服务器间验证工具的设计"></a>服务器间验证工具的设计</h2><h3 id="获取LeanCloud授权"><a href="#获取LeanCloud授权" class="headerlink" title="获取LeanCloud授权"></a>获取LeanCloud授权</h3><p>服务器验证工具用来使LeanCloud云数据库获得RongCloud服务器的身份授权。在LeanCloud官网完成免费的注册，然后创建本应用，在本地项目集成LeanCloud SDK后在Lit-C-Server的AppDelegate类中获得LeanCloud授权，将图4-4中所示Key写入到验证程序中。</p>
+<p>图4-4 LeanCloud云数据库验证Key示例图<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -&gt; Bool &#123;</div><div class="line">                AVOSCloud.setApplicationId(&quot;tcsQqKVPCIIS2xo6FcVGwpOt-gzGzoHsz&quot;, clientKey: &quot;A14QtfKRXAVQqFEivSCWwTXf&quot;)</div><div class="line">                return true</div><div class="line">    &#125;</div></pre></td></tr></table></figure></p>
+<h3 id="验证RongCloud服务器"><a href="#验证RongCloud服务器" class="headerlink" title="验证RongCloud服务器"></a>验证RongCloud服务器</h3><p>在RongCloud官网进行免费注册。然后输入RongCloud下Lit-C应用中如图4-5所示的 AppKey 和 AppSecret与RongCloud的服务器进行验证</p>
+<p>图4-5 RongCloud服务器验证Key示例图<br><code>struct App {
+    static let key = &quot;lmxuhwagxyvid&quot;
+    static let secret = &quot;dE0kOpHX9Ir&quot;
+}</code><br>定义“getToken”方法来获取RongCloud的Token使LeanCloud数据库获得RongCloud的授权，来获得单聊与好友添加请求的消息的功能：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">struct URLAPI &#123;</div><div class="line">    static let getToken  = &quot;/user/getToken&quot;</div><div class="line">    static let SystemMsg = &quot;/message/system/publish&quot;</div><div class="line">&#125;</div><div class="line">public class func getToken(appKey: String, appSecret: String, userId: String, name: String?, portraitUri: String?, doneCloser: Response&lt;AnyObject, NSError&gt; -&gt; Void ) &#123;</div><div class="line">let headers = HttpUtil.createHeaders(withAppKey: appKey, appSecret: appSecret)</div><div class="line">let parameters = HttpUtil.createparameters((&quot;userId&quot;, userId), (&quot;name&quot;, name ?? &quot;&quot;), (&quot;portraitUri&quot;, portraitUri ?? &quot;&quot;))</div><div class="line">Alamofire.request(.POST, &quot;\(ServerBaseURL)\(URLAPI.getToken).json&quot;,parameters: parameters, headers: headers).responseJSON &#123; (response) -&gt; Void indoneCloser(response)</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>验证完成后的请求添加好友，同意添加好友，获取RongCloud的token，返回RongCloud的token的数据处理如图4-6所示。</p>
+<p>图4-6 LeanCloud云数据库验证及请求信息处理示例图<br>将用户信息数据发送到LeanCloud数据库并存储。首先将LeanCloud存储用户属性的类名为“XWYUsers”。然后static修饰所有的用户变量，将得到的用户信息发送到LeanCloud云数据库。方法如下，完成后如图4-7。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line">struct Constants &#123;</div><div class="line">static let LeanCloudClassName = &quot;XWYUsers&quot;</div><div class="line">static let ServiceId          = &quot;tcsQqKVPCIIS2xo6FcVGwpOt-gzGzoHsz&quot;</div><div class="line">static let DefaultPortrait    = UIImage(named: &quot;image.1&quot;)</div><div class="line">static let Username           = &quot;username&quot;</div><div class="line">static let Nickname           = &quot;nickname&quot;</div><div class="line">static let Email              = &quot;email&quot;</div><div class="line">static let Password           = &quot;password&quot;</div><div class="line">static let Constellation      = &quot;constellation&quot;</div><div class="line">static let Portrait           = &quot;portrait&quot;</div><div class="line">static let PortraitUrl        = &quot;portraitUrl&quot;</div><div class="line">static let SharedAppDelegate  = UIApplication.sharedApplication().delegate as! AppDelegate</div><div class="line">&#125;</div><div class="line">struct Type &#123;</div><div class="line">    static let System          = RCConversationType.ConversationType_SYSTEM</div><div class="line">    static let Privatte        = RCConversationType.ConversationType_PRIVATE</div><div class="line">    static let Group           = RCConversationType.ConversationType_GROUP</div><div class="line">    static let PublicService   = RCConversationType.ConversationType_PUBLICSERVICE</div><div class="line">    static let ChatRoom        = RCConversationType.ConversationType_CHATROOM</div><div class="line">    static let Discussion      = RCConversationType.ConversationType_DISCUSSION</div><div class="line">    static let AppService      = RCConversationType.ConversationType_APPSERVICE</div><div class="line">    static let PushService     = RCConversationType.ConversationType_PUSHSERVICE</div><div class="line">    static let CustomerService = RCConversationType.ConversationType_CUSTOMERSERVICE</div><div class="line">&#125;</div><div class="line">struct ModelType &#123;</div><div class="line">    static let Collection      = RCConversationModelType.CONVERSATION_MODEL_TYPE_COLLECTION</div><div class="line">    static let Normal          = RCConversationModelType.CONVERSATION_MODEL_TYPE_NORMAL</div><div class="line">    static let Customization   = RCConversationModelType.CONVERSATION_MODEL_TYPE_CUSTOMIZATION</div><div class="line">    static let PublicService   = RCConversationModelType.CONVERSATION_MODEL_TYPE_PUBLIC_SERVICE</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>图4-7 LeanCloud云数据库存储用户注册信息示例图</p>
+<h1 id="即时通讯软件的详细设计"><a href="#即时通讯软件的详细设计" class="headerlink" title="即时通讯软件的详细设计"></a>即时通讯软件的详细设计</h1><h2 id="登录注册界面"><a href="#登录注册界面" class="headerlink" title="登录注册界面"></a>登录注册界面</h2><h3 id="用户注册"><a href="#用户注册" class="headerlink" title="用户注册"></a>用户注册</h3><p>用户注册界面主要用于记录用户注册信息，并将获得的用户名称，密码，邮箱，昵称，星座，头像等用户信息发送到LeanCloud云数据库进行验证并保存。<br>a 在Storyboard部署完各控件后，在注册视图类的代码界面绑定记录用户信息的文本框。<br>  <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">@IBOutlet weak var userNameTextField: UITextField!</div><div class="line">@IBOutlet weak var passwordTextField: UITextField!</div><div class="line">@IBOutlet weak var emailTextField: UITextField!</div><div class="line">@IBOutlet weak var nicknameTextField: UITextField! </div><div class="line">@IBOutlet weak var constellationTextField: UITextField!</div><div class="line">@IBOutlet weak var sexSegment: UISegmentedControl!</div></pre></td></tr></table></figure></p>
+<p>b 构造一个用Token保存用户信息的方法，将用户输入的信息发送给服务器，如果可以发送在延迟一秒钟后显示“注册成功”，如果不能发送显示“注册失败”。<br>     <pre><code><br>      func saveUserWithToken(token: String) {<br>        let user = AVObject(className: “XWYUsers”)<br>        user[“username”] = userNameTextField.text<br>        user[“nickname”] = nicknameTextField.text<br>        user[“password”] = passwordTextField.text<br>        user[“email”] = emailTextField.text<br>        user[“token”] = token<br>        user[“constellation”] = constellationTextField.text<br>         }()<br>        user.saveInBackgroundWithBlock { <a href="bool, error">unowned self</a> -&gt; Void in<br>        if bool {self.view.showHUDWithText<br>        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(1 * Dou ble(NSEC_PER_SEC))), dispatch_get_main_queue(), { <a href="">unowned self</a> -&gt; Void in self.dismissViewControllerAnimated(true, completion: nil)})<br>          } else {<br>        self.view.showHUDWithText }<br>          }<br>        }<br>         </code></pre></p>
+<p>c 点击导航栏上的“完成”按钮后验证文本框的输入信息，如果检测到userName输入框没有用户名的输入则显示“用户名不能为空！”，在密码输入框约束密码长度为6~20，在邮箱输入框约束邮箱不能为空，并限制邮箱为常用邮箱格式。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div></pre></td><td class="code"><pre><div class="line">@IBAction func doneBarButton(sender: UIBarButtonItem) &#123;</div><div class="line"> guard !userNameTextField.text!.isEmpty else &#123;</div><div class="line">view.showHUDWithText(&quot;用户名不能为空！&quot;)</div><div class="line">userNameTextField.becomeFirstResponder()</div><div class="line">userNameTextField</div><div class="line">return</div><div class="line">&#125;</div><div class="line">let count = passwordTextField.text!.characters.count</div><div class="line">guard count &gt;= 6 &amp;&amp; count &lt;= 20 else &#123;</div><div class="line"> view.showHUDWithText(&quot;密码长度为6到20位!&quot;)</div><div class="line">passwordTextField.becomeFirstResponder()</div><div class="line">passwordTextField</div><div class="line">return</div><div class="line">&#125;</div><div class="line"> guard let email = emailTextField.text where !email.isEmpty else &#123;</div><div class="line"> view.showHUDWithText(&quot;邮箱不能为空！&quot;)</div><div class="line">emailTextField.becomeFirstResponder()</div><div class="line">emailTextField</div><div class="line">return</div><div class="line">&#125;</div><div class="line">let predicate = NSPredicate(format: &quot;SELF MATCHES %@&quot;, &quot;[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]&#123;2,4&#125;&quot;)</div><div class="line">guard predicate.evaluateWithObject(email) else &#123;</div><div class="line">view.showHUDWithText(&quot;邮箱格式不对！&quot;)</div><div class="line">emailTextField.becomeFirstResponder()</div><div class="line">emailTextField</div><div class="line">return</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>d 构造用户注册功能，用于查询服务端是否已经存在此用户名，如果此用户曾经没有注册过则发送“请求获取token的信息”并进行注册，并验证是否正确获取了token信息并将结果打印出来帮助软件调试验证。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line">func signUpUser() &#123;</div><div class="line">Http.queryForExistObject(userNameTextField.text!) &#123; [unowned self](object, error) -&gt; () in</div><div class="line">guard object == nil else &#123;</div><div class="line">self.timer?.invalidate()</div><div class="line">self.HUD?.hidden = true</div><div class="line">self.view.showHUDWithText(&quot;用户已被注册!！&quot;)</div><div class="line">return</div><div class="line">&#125;</div><div class="line"> self.client.createConversationWithName(&quot;获取token&quot;, clientIds: [&quot;server&quot;], callback: &#123; (conversation, error) -&gt; Void in</div><div class="line">                dispatch_async(dispatch_get_main_queue(), &#123; [unowned self]() -&gt; Void in</div><div class="line">let username = self.userNameTextField.text!</div><div class="line">let message = &quot;/user/getToken-\(username)&quot;</div><div class="line">conversation.sendMessage(AVIMTextMessage(text: message, attributes: nil), callback: &#123; (bool, error) -&gt; Void in</div><div class="line">if bool &#123;</div><div class="line">print(&quot;获取token消息发送成功&quot;)</div><div class="line">&#125; else &#123;</div><div class="line">print(&quot;获取token消息发送失败&quot;)</div><div class="line">  &#125;</div><div class="line"> &#125;)</div><div class="line"> &#125;)</div><div class="line">&#125;)</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h3 id="用户名及密码验证"><a href="#用户名及密码验证" class="headerlink" title="用户名及密码验证"></a>用户名及密码验证</h3><p>进入登录界面，当用户输入完用户名和密码后，能够检查用户，并在检查通过后准许用户登录。<br>a 在Storyboard界面设计完UI后在登录界面的ViewController上设置并代理账号及密码的文本框。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">@IBOutlet weak var userTextField: UITextField!</div><div class="line">        @IBOutlet weak var passwordTextField: UITextField!</div><div class="line">   </div><div class="line"> override func viewDidLoad() &#123; super.viewDidLoad()</div><div class="line">        userTextField.delegate = self</div><div class="line">        passwordTextField.delegate = self</div><div class="line">    &#125;</div></pre></td></tr></table></figure></p>
+<p>b 构造一个登录Button用于验证输入。首先用户名及密码的TextField输入不能为空，成功后获取好友信息，构造方法checkAndLogIn来查询用户是否已注册和登录并用Http.queryForExistObject语句来查询用户名和密码的输入是否正确,如果出错则print“用户名不存在”，“密码错误”便于测试。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line">@IBAction func logInButton(sender: UIButton) &#123;</div><div class="line">guard !userTextField.text!.isEmpty else &#123;</div><div class="line">self.view.showHUDWithText(&quot;用户名不能为空!&quot;)</div><div class="line">return</div><div class="line">        &#125;</div><div class="line">guard !passwordTextField.text!.isEmpty else &#123;</div><div class="line">self.view.showHUDWithText(&quot;密码不能为空!&quot;)</div><div class="line">return</div><div class="line">&#125;</div><div class="line">checkAndLogIn()</div><div class="line">&#125;</div><div class="line"></div><div class="line">func checkAndLogIn() &#123;</div><div class="line">Http.queryForExistObject(userTextField.text!) &#123; [unowned self](object, error) -&gt; () in</div><div class="line">guard object != nil else &#123;</div><div class="line">self.view.showHUDWithText(&quot;用户名不存在!&quot;)</div><div class="line">return</div><div class="line">&#125;</div><div class="line">guard (object[&quot;password&quot;] as? String) == self.passwordTextField.text else &#123;</div><div class="line">self.view.showHUDWithText(&quot;密码不正确&quot;)</div><div class="line">return</div><div class="line">         &#125;</div></pre></td></tr></table></figure></p>
+<p>c 当用户信息保存到本地成功后显示登录成功，并给AppDelegate中的user赋值<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">let isSuccessfulSave = self.saveUser(object)</div><div class="line">if isSuccessfulSave &#123;</div><div class="line"></div><div class="line">self.userTextField?.resignFirstResponder()</div><div class="line">self.passwordTextField?.resignFirstResponder()</div><div class="line">self.view.showHUDWithText( &quot;登录成功！&quot;)</div><div class="line">     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(1 * Double(NSEC_PER_SEC))), dispatch_get_main_queue(), &#123; [unowned self]() -&gt; Void in</div><div class="line">                 Constants.SharedAppDelegate.user = NSKeyedUnarchiver.unarchiveObjectWithFile(User.ArchiveURL.path!) as? User</div></pre></td></tr></table></figure></p>
+<p>   d 连接成功后用Http.getFriendsWithId获取该user的好友信息，并使当前用户信息currentUserInfo等于RC上的用户信息RCUserInfo，并将RCIMClient上的用户信息更新，完成这些后用turnToChatListVC跳转到会话列表界面，如果连接出错则print(“Token不正确”)。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line">Http.getFriendsWithId((Constants.SharedAppDelegate.user?.username)!) &#123; _ in &#125;               RCIM.sharedRCIM().connectWithToken(Constants.SharedAppDelegate.user?.token success: &#123; [unowned self](string) -&gt; Void in</div><div class="line">dispatch_async(dispatch_get_main_queue(), &#123; () -&gt; Void in</div><div class="line">print(&quot;\(string)连接成功！&quot;)</div><div class="line"></div><div class="line">let currentUserInfo = RCUserInfo(userId: self.user?.username, name: self.user?.nickname, portrait: self.user?.portraitUrl)</div><div class="line">RCIMClient.sharedRCIMClient().currentUserInfo = currentUserInfo</div><div class="line">Constants.SharedAppDelegate.turnToChatListVC()</div><div class="line">&#125;)</div><div class="line">&#125;,</div><div class="line">error: &#123; (errorCode) -&gt; Void in</div><div class="line">print(&quot;\(errorCode)&quot;)</div><div class="line">&#125;) &#123; () -&gt; Void in</div><div class="line">// token 不正确</div><div class="line">print(&quot;Token不正确&quot;)</div><div class="line">&#125;</div><div class="line">&#125;)</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div></pre></td></tr></table></figure></p>
+<h3 id="通过JsAnimation方法的动态背景的实现"><a href="#通过JsAnimation方法的动态背景的实现" class="headerlink" title="通过JsAnimation方法的动态背景的实现"></a>通过JsAnimation方法的动态背景的实现</h3><p>一个即时通讯软件拥有一个引人注目的UI背景，是吸引用户使用本软件的重要条件之一。在登录界面通过（Image_1,Image_2,Image_3）的放大式缓慢移动，将会带来一定的视觉美化效果。<br>a 首先在Storyboard下的LoginViewController中新建一个View图层并置于最底层，约束View使得该图层能自动适配移动端屏幕。<br>b 将View绑定JsAnimation类的方法。<br>c 在LoginViewController代码界面动态绑定基于JsAnimation类的View。<br>d 使用该方法，并在项目图库中添加Image_1,Image_2,Image_3。<br>关键代码如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">func animatedImagesNumberOfImages(animatedImagesView: JSAnimatedImagesView!) -&gt; UInt &#123;</div><div class="line">return 4</div><div class="line">&#125;</div><div class="line"></div><div class="line">func animatedImagesView(animatedImagesView: JSAnimatedImagesView!, imageAtIndex index: UInt) -&gt;</div><div class="line">UIImage! &#123;</div><div class="line">return UIImage(named: &quot;image\(index+1)&quot;)</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h2 id="会话列表界面"><a href="#会话列表界面" class="headerlink" title="会话列表界面"></a>会话列表界面</h2><h3 id="好友请求处理"><a href="#好友请求处理" class="headerlink" title="好友请求处理"></a>好友请求处理</h3><p>在会话列表界面按下添加好友按钮后进入好友添加界面，搜索到已注册用户后可以进行好友添加功能。<br>a 使用portraitUrl设置好友信息的头像，并将其显示出来<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">if let cacheUserInfo = NSUserDefaults.standardUserDefaults().</div><div class="line">objectForKey(username) as? NSDictionary &#123;</div><div class="line">portraitUrl = cacheUserInfo[Constants.PortraitUrl] as? String</div><div class="line">imageView.setImageWithUrl(portraitUrl,</div><div class="line">placeholderImage: Constants.DefaultPortrait)</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>b 构造一个agreeButton用于同意好友请求，完成后显示“你已成功添加对方为好友”。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">@IBAction func agreeButton(sender: UIButton) &#123;</div><div class="line">print(&quot;按了同意按钮&quot;)</div><div class="line">if var dict =</div><div class="line">NSUserDefaults.standardUserDefaults().objectForKey(username)</div><div class="line">as? [String: AnyObject] &#123;</div><div class="line">dict[&quot;agree&quot;]  = true</div><div class="line">NSUserDefaults.standardUserDefaults().setObject(dict, forKey: username)</div><div class="line">NSUserDefaults.standardUserDefaults().synchronize()</div><div class="line">&#125;</div><div class="line">agreeButton.enabled = false</div><div class="line">refuseButton.enabled = false</div><div class="line">agreeOrRefuseLabel.text = &quot;你已添加对方为好友&quot;</div></pre></td></tr></table></figure></p>
+<p>c 首先开启聊天连接，获取当前的用户和好友ID，组和信息内容，创建“同意添加好友会话”并发送信息，发送成功后显示“同意加好友消息发送成功”并用closeWithCallback关闭聊天连接，如果失败则显示“XX用户名开启LeanCloud聊天失败”。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">let client = AVIMClient()</div><div class="line">client.openWithClientId(username, callback: &#123; (bool, error) -&gt; Void in</div><div class="line">dispatch_async(dispatch_get_main_queue(), &#123; [unowned self]() -&gt; Void in</div><div class="line">if bool &#123;</div><div class="line">print(&quot;\(self.username)开启LeanCloud聊天成功&quot;)</div><div class="line">let userId = RCIMClient.sharedRCIMClient().</div><div class="line">currentUserInfo.userId</div><div class="line">let friendId = self.username</div><div class="line">let message = &quot;/message/system/publish-agreeAddFriend-\(userId)-\(friendId)&quot;</div><div class="line">client.createConversationWithName(&quot;同意加好友&quot;, clientIds: [&quot;server&quot;], callback: &#123; (conversation, error) -&gt; Void in</div><div class="line">dispatch_async(dispatch_get_main_queue(), &#123; () -&gt; Void in</div><div class="line">conversation.sendMessage(AVIMTextMessage(text: message, attributes: nil), callback: &#123; (bool, error) -&gt; Void in</div><div class="line">if bool &#123;</div><div class="line">print(&quot;同意加好友消息发送成功&quot;)</div><div class="line">self.view.showHUDWithText(&quot;同意加好友消息发送成功&quot;)                                              </div><div class="line">client.closeWithCallback(&#123; (bool, error) -&gt; Void in</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>d 构造一个refuseButton用于拒绝好友请求，完成后显示“你已拒绝添加对方为好友”，并且使按钮处于不可用状态。 首先开启聊天连接，获取当前的用户和好友ID，组和信息内容，创建“拒绝添加好友会话”并发送信息，发送成功后显示“拒绝添加好友消息发送成功”。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div></pre></td><td class="code"><pre><div class="line">@IBAction func refuseButton(sender: UIButton) &#123;</div><div class="line">print(&quot;按了拒绝按钮&quot;)</div><div class="line">if var dict = NSUserDefaults.standardUserDefaults().objectForKey(username) as? [String: AnyObject] &#123;</div><div class="line">NSUserDefaults.standardUserDefaults().setObject(dict, forKey: username)</div><div class="line">NSUserDefaults.standardUserDefaults().synchronize()</div><div class="line">&#125;</div><div class="line">agreeOrRefuseLabel.text = &quot;你已拒绝添加对方为好友&quot;</div><div class="line">let client = AVIMClient()</div><div class="line">client.openWithClientId(username, callback: &#123; (bool, error) -&gt; Void in</div><div class="line">dispatch_async(dispatch_get_main_queue(), &#123; [unowned self]() -&gt; Void in</div><div class="line">if bool &#123;</div><div class="line">print(&quot;\(self.username)开启LeanCloud聊天成功&quot;)</div><div class="line">let userId = RCIMClient.sharedRCIMClient().currentUserInfo.userId</div><div class="line">let friendId = self.username</div><div class="line">let message = &quot;/message/system/publish-refuseAddFriend-\(userId)-\(friendId)&quot;</div><div class="line">client.createConversationWithName(&quot;拒绝添加好友&quot;, clientIds: [&quot;server&quot;], callback: &#123; (conversation, error) -&gt; Void in</div><div class="line">dispatch_async(dispatch_get_main_queue(), &#123; () -&gt; Void in</div><div class="line">conversation.sendMessage(AVIMTextMessage(text: message, attributes: nil), callback: &#123; (bool, error) -&gt; Void in</div><div class="line">if bool &#123;</div><div class="line">print(&quot;拒绝加好友消息发送成功&quot;)</div><div class="line">self.view.showHUDWithText(&quot;拒绝添加好友消息发送成功&quot;)</div></pre></td></tr></table></figure></p>
+<h3 id="会话列表和未读新消息"><a href="#会话列表和未读新消息" class="headerlink" title="会话列表和未读新消息"></a>会话列表和未读新消息</h3><p>会话列表界面可以显示未接受的新消息及发送人的信息。<br>使用Http.queryForExistObject方法获得用户信息并调用父类会话类获取未读消息数：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">Http.queryForExistObject(contactNotificationMsg.sourceUserId, doneCloser: &#123; [unowned self](object, error) -&gt; () in</div><div class="line">guard object != nil else &#123; return &#125;</div><div class="line">let userInfo = RCUserInfo()</div><div class="line">userInfo.name = object[Constants.Nickname] as? String ?? &quot;&quot;</div><div class="line">userInfo.userId = object[Constants.Username] as! String</div><div class="line">userInfo.portraitUri = object[Constants.PortraitUrl] as? String ?? &quot;&quot;</div><div class="line">let userInfoDic: NSDictionary = [Constants.Nickname: userInfo.name, Constants.PortraitUrl: userInfo.portraitUri]</div><div class="line">NSUserDefaults.standardUserDefaults().setObject(userInfoDic, forKey: contactNotificationMsg.sourceUserId)</div><div class="line">NSUserDefaults.standardUserDefaults().synchronize()</div><div class="line">dispatch_async(dispatch_get_main_queue(), &#123; [unowned self]() -&gt; Void in</div><div class="line">self.refreshConversationTableViewWithConversationModel(customModel)</div><div class="line">self.notifyUpdateUnreadMessageCount()</div><div class="line">if let left = notification.userInfo![&quot;left&quot;] as? NSNumber where left.integerValue == 0 &#123;</div><div class="line">self.refreshConversationTableViewIfNeeded()</div><div class="line">&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h2 id="聊天界面"><a href="#聊天界面" class="headerlink" title="聊天界面"></a>聊天界面</h2><p>在聊天界面，用户可以与其他用户进行文字传输，图片传输，语音传输，表情发送等功能，并显示他们的信息。</p>
+<h3 id="图片传输"><a href="#图片传输" class="headerlink" title="图片传输"></a>图片传输</h3><p>图片消息包括两个主要部分：缩略图和大图，缩略图直接 Base64 编码后放入 content 中，大图首先上传到文件服务器（RongCloud SDK 中默认上传到七牛云存储），然后将云存储上的大图地址放入消息体中。调用sendMessage方法，传入相应的参数即可发送图片消息。消息类名：RCImageMessage。示意图5-1所示。<br>图5-1 图片发送示意图<br>上传自己服务器后发送图片消息流程如图5-2所示。<br>图5-2 图片经由自己服务器发送示意图<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">-(void)sendImageMessage:(UIImage *)originImage targetId:(NSString *)targetId conversationType:(RCConversationType)conversationType &#123;</div><div class="line">  RCImageMessage *imageMessage = [RCImageMessage messageWithImage:originImage];</div><div class="line">  imageMessage.full = YES;</div><div class="line">[[RCIMClient sharedRCIMClient] sendImageMessage:conversationType targetId:targetId content:imageMessage pushContent:nil progress:^(int progress, long messageId) &#123;</div><div class="line"> &#125; success:^(long messageId) &#123;</div><div class="line"> &#125; error:^(RCErrorCode errorCode, long messageId) &#123;</div><div class="line"> &#125;];</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h3 id="语音传输"><a href="#语音传输" class="headerlink" title="语音传输"></a>语音传输</h3><p>获取要发送的语音数据 wavData，并获得语音时长，通过sendMessage方法，传入相应的参数即可发送语音消息，消息类名：RCVoiceMessage。代码如下。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">-(void)sendVoiceMessage:(NSData *)wavData duration:(long)duration targetId:(NSString *)targetId conversationType:(RCConversationType)conversationType &#123;</div><div class="line">RCVoiceMessage *voiceMessage = [RCVoiceMessage messageWithAudio:wavData duration:duration];[[RCIMClient sharedRCIMClient] sendMessage:conversationType targetId:targetId content:voiceMessage pushContent:nil pushData:nil success:^(long messageId) &#123;</div><div class="line">//NSLog(@&quot;发送语音消息成功&quot;);</div><div class="line"> &#125; error:^(RCErrorCode nErrorCode, long messageId) &#123;</div><div class="line">//NSLog(@&quot;发送语音消息失败，错误码是(%ld)&quot;, (long)nErrorCode);</div><div class="line"> &#125;];</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h2 id="联系人界面"><a href="#联系人界面" class="headerlink" title="联系人界面"></a>联系人界面</h2><h3 id="好友列表"><a href="#好友列表" class="headerlink" title="好友列表"></a>好友列表</h3><p>进入联系人界面可以获得用户的好友列表及其昵称和头像信息，如图5-7所示。<br>显示昵称和头像,通过网络设置头像：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">@IBOutlet weak var portraitImageView: UIImageView!</div><div class="line">@IBOutlet weak var nicknameLabel: UILabel!</div><div class="line">var friend: Friend! &#123;</div><div class="line">didSet &#123;</div><div class="line"> nicknameLabel?.text = friend.nickname</div><div class="line">portraitImageView.image = friend.portrait</div><div class="line">if friend.portrait == nil &#123;</div><div class="line"> portraitImageView.setImageWithUrl(friend.portraitUrl, placeholderImage: Constants.DefaultPortrait)</div><div class="line">&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h3 id="刷新好友列表"><a href="#刷新好友列表" class="headerlink" title="刷新好友列表"></a>刷新好友列表</h3><p>在联系人界面，调用getFriendsWithId方法实现向下滑动屏幕刷新好友列表，代码如下。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">@IBAction func refreshTableView(sender: UIRefreshControl) &#123;</div><div class="line">Http.getFriendsWithId(Constants.SharedAppDelegate.user!.username) &#123; (friends) -&gt; Void in</div><div class="line">print(&quot;刷新朋友&quot;)</div><div class="line">self.friends = friends</div><div class="line">结束 refreshControl 的旋转</div><div class="line">sender.endRefreshing()</div><div class="line">&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h3 id="查询用户"><a href="#查询用户" class="headerlink" title="查询用户"></a>查询用户</h3><p>实现搜索好友并且能够边输入边显示，能根据字符串[10]搜索用户的功能，代码如下：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line">func searchBarSearchButtonClicked(searchBar: UISearchBar) &#123;</div><div class="line">searchWithText(searchBar.text)</div><div class="line">searchBar.resignFirstResponder()</div><div class="line">&#125;</div><div class="line">func searchBar(searchBar: UISearchBar, textDidChange searchText: String) &#123;</div><div class="line">searchWithText(searchText)</div><div class="line">&#125;</div><div class="line">- parameter searchText: </div><div class="line">func searchWithText(searchText: String?) &#123;</div><div class="line">if let text = searchText where !text.isEmpty &#123;</div><div class="line">Http.queryForObjects(text, doneCloser: &#123; [unowned self](objects, error) -&gt; () in</div><div class="line">查到用户，赋值给 results</div><div class="line">self.results = objects.flatMap(&#123; $0.friend  &#125;)</div><div class="line">&#125;)</div><div class="line">&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>完成后如图5-2所示。</p>
+<p>图5-3查询好友名称示意图</p>
+<h2 id="设置界面"><a href="#设置界面" class="headerlink" title="设置界面"></a>设置界面</h2><h3 id="用户自身信息"><a href="#用户自身信息" class="headerlink" title="用户自身信息"></a>用户自身信息</h3><p>用户在设置界面可以显示之前注册过的信息，有用户注册时的头像（URL[11]）和用户昵称。<br>首先设置当前用户头像为默认头像，当成功从url网络取回头像时，该头像将被替换。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div></pre></td><td class="code"><pre><div class="line">if user.portrait == nil &#123;</div><div class="line">imageView.image = Constants.DefaultPortrait</div><div class="line">if let url = user.portraitUrl where !url.isEmpty &#123;</div><div class="line">Alamofire.request(.GET, url).response(completionHandler: &#123; (request, response, nsData, error) -&gt; Void in</div><div class="line">if let data = nsData, image = UIImage(data: data) &#123;</div><div class="line">dispatch_async(dispatch_get_main_queue(), &#123; [unowned self]() -&gt; Void in</div><div class="line">显示用户URLImage，并保存头像进File：User.ArchiveURL.path这个地址如果出错打印并提醒。</div><div class="line">self.imageView.image = image</div><div class="line">self.user.portrait = image</div><div class="line">if let user = self.user &#123;</div><div class="line">NSKeyedArchiver.archiveRootObject(user, toFile: User.ArchiveURL.path!)</div><div class="line">&#125;</div><div class="line">&#125;)</div><div class="line">&#125; else &#123;</div><div class="line">print(&quot;\(error.debugDescription)&quot;)</div><div class="line">&#125;</div><div class="line">&#125;)</div><div class="line">&#125;</div><div class="line">&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h3 id="退出登录"><a href="#退出登录" class="headerlink" title="退出登录"></a>退出登录</h3><p>用户在设置界面可以退出当前账户。<br>设置显示退出登陆的警告框，当按推出时，发送确定退出登录信息，点击确定后，清除当前用户信息，清除当前的好友信息，释放当前的window。然后断开连接，返回到登录界面，并清空选中的cell。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">if indexPath.section == 3 &amp;&amp; indexPath.row == 0 &#123;</div><div class="line">self.showAlertWithTitle(&quot;退出登录&quot;, message: &quot;确定退出登录&quot;, suerCloser: &#123; (_) -&gt; Void in</div><div class="line">print(&quot;确定退出登录&quot;)</div><div class="line">let appDelegate = Constants.SharedAppDelegate</div><div class="line">appDelegate.user = User()</div><div class="line">appDelegate.friends = []</div><div class="line">appDelegate.window = nil</div><div class="line">RCIM.sharedRCIM().disconnect() </div><div class="line">appDelegate.turnToLoginVC()</div><div class="line">&#125;)</div><div class="line">&#125;</div><div class="line">let cell = tableView.cellForRowAtIndexPath(indexPath)!</div><div class="line">cell.selected = false</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h3 id="IOSApp应用角标添加功能的实现"><a href="#IOSApp应用角标添加功能的实现" class="headerlink" title="IOSApp应用角标添加功能的实现"></a>IOSApp应用角标添加功能的实现</h3><p>用户在返回主界面的时，当新消息出现或者好友数据被处理时，能够在App图标的右上角显示红色数字角标，提醒用户有新的信息。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">func didReceiveMessageNotification(notification: NSNotification) &#123;</div><div class="line">UIApplication.sharedApplication().applicationIconBadgeNumber += 1</div><div class="line">if let rcmessage = notification.object as? RCMessage, let rcInfoNtfMsg = rcmessage.content as? RCInformationNotificationMessage &#123;</div><div class="line">let text = rcInfoNtfMsg.message</div><div class="line">if text.hasSuffix(&quot;已同意加你为好友&quot;) &#123;</div><div class="line">Http.getFriendsWithId(user!.username) &#123; _ in &#125;</div><div class="line">print(&quot;已同意加你为好友&quot;)</div><div class="line">&#125;</div><div class="line">&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<h1 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h1><h2 id="测试环境"><a href="#测试环境" class="headerlink" title="测试环境"></a>测试环境</h2><p>开发设备：MacBook Pro 2015<br>系统：OS X El Capitan<br>开发软件：Xcode7.2<br>网络需求：3G，4G，WIFI<br>计算机CPU性能：3.0GHZ及以上<br>计算机内存要求：8GB及以上<br>设备名称：iphone6，iPod6<br>程序名称：Lit-C<br>程序大小：126MB</p>
+<h3 id="IOS实机测试方法"><a href="#IOS实机测试方法" class="headerlink" title="IOS实机测试方法"></a>IOS实机测试方法</h3><p>测试许可：AppleStore开发者账号，官网注册并配置证书。<br>a 首先打开Apple官网进行注册。（<a href="http://www.apple.com/）" target="_blank" rel="external">http://www.apple.com/）</a><br>b 将设备更新到ios9.0及以上。<br>c 在Xcode左上角Xcode左击选择Preferences后单击Account添加刚刚在官网注册的账号，如图6-1所示。</p>
+<p>图6-1开发者账号添加示意图<br>d 在iphone6以及ipod上登录开发者账号。<br>e 回到Xcode，在开发者组（Team）中写入自己的App id。<br>f 连接设备开始测试。</p>
+<h2 id="用户注册测试"><a href="#用户注册测试" class="headerlink" title="用户注册测试"></a>用户注册测试</h2><p>当用户打开本即时通讯软件时，点击注册进入注册界面如图6-2所示。</p>
+<p>图6-2注册界面示意图<br>此时对注册时的各项信息的约束功能进行测试，如表6-1所示。<br>表6-1 用户注册测试<br>测试用例    步骤    预期结果    测试结果<br>用户名不存在，密码不存在，邮箱不存在    没输入用户名，密码，邮箱    无法注册    等同于期望值<br>用户名存在，密码不存在，邮箱不存在<br>    输入了用户名，没有密码和邮箱    无法注册    等同于期望值<br>用户名存在，密码存在，邮箱存在并且都在软件约束范围内    输入用户名，输入密码（6-12位），输入邮箱（标准规则）    成功注册    等同于期望值</p>
+<h2 id="用户登录测试"><a href="#用户登录测试" class="headerlink" title="用户登录测试"></a>用户登录测试</h2><p>当用户在登录界面如图6-3所示。</p>
+<p>图6-3登录界面示意图<br>对登录时的各项功能的测试如表6-2所示。<br>表6-2 用户登录测试<br>测试用例    步骤    预期结果    测试结果<br>用户名不存在，密码不存在，网络环境不存在    没输入用户名，密码，不处于网络环境    无法登录    等同于期望值<br>用户名存在，密码存在，网络环境不存在<br>    输入了用户名，密码，不存在网络环境    无法登录    等同于期望值<br>用户名存在，密码存在，网络环境存在    输入用户名，输入密码（6-12位），处于网络环境中    成功登录    等同于期望值</p>
+<h2 id="用户会话测试"><a href="#用户会话测试" class="headerlink" title="用户会话测试"></a>用户会话测试</h2><p>当用户点击列表的好友进入如图6-4所示的会话界面。</p>
+<p>图6-4会话界面示意图<br>对会话时的各项功能的测试如表6-3所示。<br>表6-3 用户会话测试<br>用例名称    测试目的    输入描述    预期结果    实际结果<br>发送文字    测试文字能否成功发送，信息能否即使传递    1.使用输入法输“High”<br>2.点击发送。        对方用户显示“High”    与预期结果一致<br>发送语音    测试语音能否成功发送，对方能否成功播放    1.按住语音按钮。<br>2.点击发送。    对方用户接受到语音并播放    与预期结果一致<br>发送文字    测试图片能否成功发送，对方能否成功显示图片    1.在相册中随机选取图片发送。<br>2.点击发送。    对方用户显示已发送的图片    与预期结果一致</p>
+<h1 id="结束语"><a href="#结束语" class="headerlink" title="结束语"></a>结束语</h1><p>本即时通讯软件基于Mac系统上的Swift语言进行开发，用LeanCloud作为云数据库，RongCloud作为通讯服务器。用户可以通过本即时通讯软件进行语音发送，文字传输，好友添加以及图片传输等聊天软件具备的基本功能,软件前端界面清爽，功能完善，软件服务器端延迟低，符合即时通讯软件应用的基本要求。完成软件的设计与实现后，我对在IOS平台上进行移动设备应用程序的开发有了新的感悟。<br>经过六个月的钻研奋斗，毕业设计终于接近末声。作为计算机科学与技术专业的学生，我在这六个月真正意义上地将四年所学结合到软件工程的实际开发中去，正确认识了软件功能需求对于开发设计的重要性。花费合理的时间对软件的架构和搭建进行思考，对软件后期完成的质量将起着至关重要的作用。作为移动客户端，界面的美化也是软件的质量之一，精致简洁的界面将会极大地吸引用户的兴趣，所以在这六个月的时间中我抽出了部分时间花在图标的大小以及位置的摆放上，并且实现了登录界面背景的动态化，这也使我的即时通讯软件较之初期的呆板变得生动起来。当自己开发的软件可以在自己的移动设备上运行的时候，其带来的惊喜是不言而喻的，更加大了我对于软件开发的兴趣。然而路漫漫其修远兮，当我看到Appstore上更多精致并且功能丰富的App时，深刻认识到自己所学知识的贫瘠，要完成功能更全面，界面更生动的App仍然需要很长的路要走。<br>目前移动应用的开发占据着IT产业的半壁江山，无论从政府需求还是民间商用上来看，移动应用都是必不可少的。另外，移动应用程序的载体也不仅局限于手机和平板电脑，智能可穿戴移动设备与虚拟现实设备的出现也将移动应用程序的人工智能化成为可能。移动应用的开发仍有很长的路要走。</p>
+<h1 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h1><p>[1] 张利飞, 张运生. 智能手机产业操作系统平台竞争战略研究[J]. 中国软科学, 2013 , (4) :1.<br>[2] 吕一博, 蓝清, 韩少杰. 开放式创新生态系统的成长基因-基于IOS、Android和Symbian的多案例研究[J]. 中国工业经济, 2015, 5(5): 2-5.<br>[3] 宋立. IOS平台社交应用系统的设计与实现[D]. 北京交通大学, 2014: 2-5.<br>[4] 杨蕙馨, 王硕, 冯文娜. 网络效应视角下技术标准的竞争性扩散—来自iOS与Android之争的实证研究[J]. 中国工业经济, 2014, 9(9): 3-4.<br>[5] 荣瑜姝. IOS平台支持云存储浏览器的设计与实现[D]. 成都理工大学, 2013: 3-6.<br>[6] 吴寅鹤. iOS平台应用程序的安全性研究[D]. 广东工业大学, 2014: 4-5.<br>[7] 夏小玲, 朱文术. 基于iPhone应用的图片请求匹配方案[J]. 东华大学学报, 2013, 2(1): 1-2.<br>[8] 曾垂鑫, 王加俊, 申丽萍, 申瑞民. 基于IOS的移动学习直播互动平台[J]. 计算机工程, 2013, 39(7): 1-3.<br>[9] 张帆. 从Objective_C到Swift的软件移植研究及实现[D]. 中国科学院大学, 2015: 1-7.<br>[10] 赵淼. 基于Telematics的iPhone手机客户端系统的研究及应用[D]. 吉林大学, 2014: 9.<br>[11] 刘鹏. 基于iOS的个人健康管理系统客户端的开发[D]. 大连理工大学, 2012: 39.</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+      
+    </div>
+
+    <div>
+      
+        
+  <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+    <div>坚持原创技术分享，您的支持将鼓励我继续创作！</div>
+    <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+      <span>赏</span>
+    </button>
+    <div id="QR" style="display: none;">
+      
+        <div id="wechat" style="display: inline-block">
+          <img id="wechat_qr" src="http://olqqu4gu2.bkt.clouddn.com/reward2739CA7F5AB99C901401766B74DCE026.png" alt="May WeChat Pay"/>
+          <p>微信打赏</p>
+        </div>
+      
+      
+        <div id="alipay" style="display: inline-block">
+          <img id="alipay_qr" src="http://olqqu4gu2.bkt.clouddn.com/3FC60BD6D6852E026BD1EA6345163E73.png" alt="May Alipay"/>
+          <p>支付宝打赏</p>
+        </div>
+      
+    </div>
+  </div>
+
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/IOS/" rel="tag">#IOS</a>
+          
+            <a href="/tags/社交类app/" rel="tag">#社交类app</a>
+          
+        </div>
+      
+
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel ">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.gif"
+               alt="May" />
+          <p class="site-author-name" itemprop="name">May</p>
+          <p class="site-description motion-element" itemprop="description"></p>
+        </div>
+        <nav class="site-state motion-element">
+          <div class="site-state-item site-state-posts">
+            <a href="/archives">
+              <span class="site-state-item-count">1</span>
+              <span class="site-state-item-name">日志</span>
+            </a>
+          </div>
+
+          
+            <div class="site-state-item site-state-categories">
+              <a href="/categories">
+                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            <div class="site-state-item site-state-tags">
+              <a href="/tags">
+                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+        </div>
+
+        
+        
+
+        
+        
+          <div class="links-of-blogroll motion-element links-of-blogroll-inline">
+            <div class="links-of-blogroll-title">
+              <i class="fa  fa-fw fa-globe"></i>
+              Links
+            </div>
+            <ul class="links-of-blogroll-list">
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://example.com/" title="Title" target="_blank">Title</a>
+                </li>
+              
+                <li class="links-of-blogroll-item">
+                  <a href="http://macshuo.com/" title="MacTalk" target="_blank">MacTalk</a>
+                </li>
+              
+            </ul>
+          </div>
+        
+
+      </section>
+
+      
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+            
+              
+            
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#引言"><span class="nav-number">1.</span> <span class="nav-text">引言</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#课题背景"><span class="nav-number">1.1.</span> <span class="nav-text">课题背景</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#国内外发展状况"><span class="nav-number">1.2.</span> <span class="nav-text">国内外发展状况</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#软件实现的目的"><span class="nav-number">1.3.</span> <span class="nav-text">软件实现的目的</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#即时通讯软件实现的关键技术"><span class="nav-number">2.</span> <span class="nav-text">即时通讯软件实现的关键技术</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Swift语言简介"><span class="nav-number">2.1.</span> <span class="nav-text">Swift语言简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#开发工具"><span class="nav-number">2.2.</span> <span class="nav-text">开发工具</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Cocoapods技术"><span class="nav-number">2.2.1.</span> <span class="nav-text">Cocoapods技术</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#RongCloud-SDK"><span class="nav-number">2.2.2.</span> <span class="nav-text">RongCloud SDK</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#LeanCloud云数据库"><span class="nav-number">2.2.3.</span> <span class="nav-text">LeanCloud云数据库</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Xcode开发平台"><span class="nav-number">2.2.4.</span> <span class="nav-text">Xcode开发平台</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Storyboard"><span class="nav-number">2.2.5.</span> <span class="nav-text">Storyboard</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#即时通讯软件的需求分析"><span class="nav-number">3.</span> <span class="nav-text">即时通讯软件的需求分析</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#业务需求分析"><span class="nav-number">3.1.</span> <span class="nav-text">业务需求分析</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#功能性需求及用例图"><span class="nav-number">3.1.1.</span> <span class="nav-text">功能性需求及用例图</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#非功能性需求"><span class="nav-number">3.1.2.</span> <span class="nav-text">非功能性需求</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#软件设计约束"><span class="nav-number">3.2.</span> <span class="nav-text">软件设计约束</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#软件设计目标"><span class="nav-number">3.2.1.</span> <span class="nav-text">软件设计目标</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#软件设计范围"><span class="nav-number">3.2.2.</span> <span class="nav-text">软件设计范围</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#软件设计测试标准"><span class="nav-number">3.2.3.</span> <span class="nav-text">软件设计测试标准</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#即时通讯软件的概要设计"><span class="nav-number">4.</span> <span class="nav-text">即时通讯软件的概要设计</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#设计流程"><span class="nav-number">4.1.</span> <span class="nav-text">设计流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#软件结构设计"><span class="nav-number">4.2.</span> <span class="nav-text">软件结构设计</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#前端功能结构"><span class="nav-number">4.2.1.</span> <span class="nav-text">前端功能结构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#服务器功能结构"><span class="nav-number">4.2.2.</span> <span class="nav-text">服务器功能结构</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#服务器间验证工具的设计"><span class="nav-number">4.3.</span> <span class="nav-text">服务器间验证工具的设计</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#获取LeanCloud授权"><span class="nav-number">4.3.1.</span> <span class="nav-text">获取LeanCloud授权</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#验证RongCloud服务器"><span class="nav-number">4.3.2.</span> <span class="nav-text">验证RongCloud服务器</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#即时通讯软件的详细设计"><span class="nav-number">5.</span> <span class="nav-text">即时通讯软件的详细设计</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#登录注册界面"><span class="nav-number">5.1.</span> <span class="nav-text">登录注册界面</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#用户注册"><span class="nav-number">5.1.1.</span> <span class="nav-text">用户注册</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#用户名及密码验证"><span class="nav-number">5.1.2.</span> <span class="nav-text">用户名及密码验证</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#通过JsAnimation方法的动态背景的实现"><span class="nav-number">5.1.3.</span> <span class="nav-text">通过JsAnimation方法的动态背景的实现</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#会话列表界面"><span class="nav-number">5.2.</span> <span class="nav-text">会话列表界面</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#好友请求处理"><span class="nav-number">5.2.1.</span> <span class="nav-text">好友请求处理</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#会话列表和未读新消息"><span class="nav-number">5.2.2.</span> <span class="nav-text">会话列表和未读新消息</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#聊天界面"><span class="nav-number">5.3.</span> <span class="nav-text">聊天界面</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#图片传输"><span class="nav-number">5.3.1.</span> <span class="nav-text">图片传输</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#语音传输"><span class="nav-number">5.3.2.</span> <span class="nav-text">语音传输</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#联系人界面"><span class="nav-number">5.4.</span> <span class="nav-text">联系人界面</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#好友列表"><span class="nav-number">5.4.1.</span> <span class="nav-text">好友列表</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#刷新好友列表"><span class="nav-number">5.4.2.</span> <span class="nav-text">刷新好友列表</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#查询用户"><span class="nav-number">5.4.3.</span> <span class="nav-text">查询用户</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#设置界面"><span class="nav-number">5.5.</span> <span class="nav-text">设置界面</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#用户自身信息"><span class="nav-number">5.5.1.</span> <span class="nav-text">用户自身信息</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#退出登录"><span class="nav-number">5.5.2.</span> <span class="nav-text">退出登录</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#IOSApp应用角标添加功能的实现"><span class="nav-number">5.5.3.</span> <span class="nav-text">IOSApp应用角标添加功能的实现</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#测试"><span class="nav-number">6.</span> <span class="nav-text">测试</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#测试环境"><span class="nav-number">6.1.</span> <span class="nav-text">测试环境</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#IOS实机测试方法"><span class="nav-number">6.1.1.</span> <span class="nav-text">IOS实机测试方法</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#用户注册测试"><span class="nav-number">6.2.</span> <span class="nav-text">用户注册测试</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#用户登录测试"><span class="nav-number">6.3.</span> <span class="nav-text">用户登录测试</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#用户会话测试"><span class="nav-number">6.4.</span> <span class="nav-text">用户会话测试</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#结束语"><span class="nav-number">7.</span> <span class="nav-text">结束语</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#参考文献"><span class="nav-number">8.</span> <span class="nav-text">参考文献</span></a></li></ol></div>
+            
+          </div>
+        </section>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">May</span>
+</div>
+
+
+        
+
+<div class="busuanzi-count">
+
+  <script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+ 
+</div>
+
+
+ 
+
+    <span class="site-uv"><i class="fa fa-user"></i><span class="busuanzi-value" id="busuanzi_value_site_uv"></span></span>
+  
+
+  
+    <span class="site-pv"><i class="fa fa-eye"></i><span class="busuanzi-value" id="busuanzi_value_site_pv"></span></span>
+
+  
+        
+      </div>
+    </footer>
+
+    <div class="back-to-top">
+      <i class="fa fa-arrow-up"></i>
+    </div>
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  <script type="text/javascript" src="/vendors/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/vendors/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/vendors/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.0.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.0.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.0.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.0.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.0.1"></script>
+
+
+
+  
+
+
+
+  
+
+
+
+  
+  
+  
+
+  
+
+  
+
+</body>
+</html>
